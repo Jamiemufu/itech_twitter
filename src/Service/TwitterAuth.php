@@ -89,15 +89,12 @@ class TwitterAuth
         //sort oauth array
         list($oauth, $oauthPairs, $key, $value) = $this->sortOauth($oauth);
 
-        //generate base string and secretkey
+        //generate base string and encode secret keys
         $secretKey = rawurlencode($this->consumerSecret) . '&' . rawurlencode($this->oauthAccessTokenSecret);
         $base_string = $this->requestType . '&' . rawurlencode($this->url) . '&' . rawurlencode(implode('&', $oauthPairs));
 
         //generate and encode signature
-        $oauth_signature = $this->encodeSignature($base_string, $secretKey);
-
-        //add generated signature onto oauth array
-        $oauth['oauth_signature'] = $oauth_signature;
+        $oauth['oauth_signature'] = $this->encodeSignature($base_string, $secretKey);
 
         //build headers for request
         $header = $this->generateHeaders($oauth);
