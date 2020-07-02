@@ -32,9 +32,7 @@ class TwitterFeedController extends AbstractController
      * This will get the timeline of the user specified
      *
      * $name = "<sceen_name of user";
-     * $screenName="<name of person>";
-     *
-     * $twitter->timeline(name);
+     * $twitter->timeline($name);
      *
      */
 }
