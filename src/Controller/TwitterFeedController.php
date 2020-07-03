@@ -64,7 +64,7 @@ class TwitterFeedController extends AbstractController
     }
 
     /**
-     * @Route("/timeline", name="display")
+     * @Route("/", name="display")
      *
      * My frontend for the application
      */
