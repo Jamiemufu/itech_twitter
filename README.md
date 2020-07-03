@@ -1,7 +1,8 @@
 # itech_twitter
 iTech Media technical test
 
-# Twitter OAuth service for displaying recent tweets for a user
+# Twitter OAuth service 
+# Displaying recent tweets for user
 
 # Installation (Working Example so far...)
 1) Clone Repository.
