@@ -11,4 +11,24 @@ import '../css/app.scss';
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 // import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+console.log("loaded");
+
+/**
+ * Imports and consts
+ */
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+import Vue from 'vue';
+
+/**
+ * Components
+ */
+Vue.component('twitterfeed', require('./components/Twitterfeed').default);
+Vue.component('card', require('./components/Card').default);
+
+/**
+ * Create a fresh Vue Application instance
+ */
+new Vue({
+    el: '#app',
+});

@@ -13,13 +13,25 @@ class TwitterFeedController extends AbstractController
 {
     /**
      * @Route("/twitter_feed", name="twitter_feed")
+     *
+     * Using my own vue js components for front end via Ajax and post
+     * But this is accessible from anywhere so the response can be implemented anywhere
+     *
      */
+
     public function index(TwitterAuth $twitter)
     {
 
-        //Todo - Add post to be able to change name
+        /**
+         * example request
+         *
+         * This will get the timeline of the user specified
+         *
+         * $name = "<sceen_name of user";
+         * $twitter->timeline($name);
+         *
+         */
 
-        //name of twitter user
         $name = "elonmusk";
         $result = $twitter->timeline($name);
 
@@ -48,15 +60,20 @@ class TwitterFeedController extends AbstractController
         }
 
         return new JsonResponse($tweets);
+
     }
 
+
     /**
-     * example request
+     * @Route("/timeline", name="display")
      *
-     * This will get the timeline of the user specified
-     *
-     * $name = "<sceen_name of user";
-     * $twitter->timeline($name);
-     *
+     * My frontend for the application
      */
+    public function displayTweet()
+    {
+
+        //render my view where my vue components are
+        return $this->render("twitter_feed/index.html.twig");
+
+    }
 }

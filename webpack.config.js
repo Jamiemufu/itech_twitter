@@ -7,10 +7,10 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
 }
 
 Encore
+
     //enableSass
     .enableSassLoader()
-    //enable vue.js
-    .enableVueLoader()
+
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     // public path used by the web server to access the output path
@@ -62,6 +62,9 @@ Encore
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
+
+    // enable vue.js
+    .enableVueLoader()
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
