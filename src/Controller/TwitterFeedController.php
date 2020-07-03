@@ -18,7 +18,7 @@ class TwitterFeedController extends AbstractController
      * But this is accessible from anywhere so the response can be implemented anywhere
      *
      */
-    public function index(TwitterAuth $twitter)
+    public function getTweets(TwitterAuth $twitter)
     {
 
         /**
@@ -68,7 +68,7 @@ class TwitterFeedController extends AbstractController
      *
      * My frontend for the application
      */
-    public function displayTweet()
+    public function viewTweets()
     {
 
         //render my view where my vue components are
