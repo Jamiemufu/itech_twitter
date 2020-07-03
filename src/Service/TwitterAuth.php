@@ -67,6 +67,9 @@ class TwitterAuth
      */
     public function timeline(string $name)
     {
+
+        //Todo need to implement error checking *IMPORTANT*
+
         //in alpha order required for Oauth
         $oauth = array(
             'oauth_consumer_key' => $this->consumerKey,
