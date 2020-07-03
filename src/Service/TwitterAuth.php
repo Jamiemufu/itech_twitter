@@ -48,7 +48,6 @@ class TwitterAuth
         $this->url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
         $this->requestType = "GET";
         $this->requestParam = "?screen_name=";
-
     }
 
 
@@ -67,8 +66,13 @@ class TwitterAuth
      */
     public function timeline(string $name)
     {
-
-        //Todo need to implement error checking *IMPORTANT*
+        /**
+         * Todo: Rate limit the Twitter API request
+         * Todo: Possible solution is store results in a table
+         * Todo: If limit passed, update table with new results
+         * Todo: Return data from the table in the response
+         * Todo: Error checking
+         */
 
         //in alpha order required for Oauth
         $oauth = array(

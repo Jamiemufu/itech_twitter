@@ -18,7 +18,6 @@ class TwitterFeedController extends AbstractController
      * But this is accessible from anywhere so the response can be implemented anywhere
      *
      */
-
     public function index(TwitterAuth $twitter)
     {
 
@@ -31,6 +30,7 @@ class TwitterFeedController extends AbstractController
          * $twitter->timeline($name);
          *
          */
+
 
         $name = "elonmusk";
         $result = $twitter->timeline($name);
@@ -62,7 +62,6 @@ class TwitterFeedController extends AbstractController
         return new JsonResponse($tweets);
 
     }
-
 
     /**
      * @Route("/timeline", name="display")
