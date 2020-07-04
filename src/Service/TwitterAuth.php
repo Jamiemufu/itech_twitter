@@ -67,10 +67,6 @@ class TwitterAuth
     public function timeline(string $name)
     {
         /**
-         * Todo: Rate limit the Twitter API request
-         * Todo: Possible solution is store results in a table
-         * Todo: If limit passed, update table with new results
-         * Todo: Return data from the table in the response
          * Todo: Error checking
          */
 

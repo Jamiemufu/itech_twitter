@@ -6,7 +6,13 @@ use App\Service\TwitterAuth;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 
 class TwitterFeedController extends AbstractController
@@ -17,8 +23,16 @@ class TwitterFeedController extends AbstractController
      * Using my own vue js components for front end via Ajax and post
      * But this is accessible from anywhere so the response can be implemented anywhere
      *
+     * @param TwitterAuth $twitter
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      */
-    public function getTweets(TwitterAuth $twitter)
+    public function getTweets(TwitterAuth $twitter, Request $request)
     {
 
         /**
@@ -32,7 +46,7 @@ class TwitterFeedController extends AbstractController
          */
 
 
-        $name = "elonmusk";
+        $name = "eltonofficial";
         $result = $twitter->timeline($name);
 
         //condensed response to only a few fields we may require
@@ -59,8 +73,13 @@ class TwitterFeedController extends AbstractController
             ];
         }
 
-        return new JsonResponse($tweets);
+        //cache response for an hour, unless different request method made i.e POST to update cache
+        $response = new JsonResponse($tweets);
+        $response->setPublic();
+        $response->setMaxAge(3600);
+        $response->isNotModified($request);
 
+        return $response;
     }
 
     /**
