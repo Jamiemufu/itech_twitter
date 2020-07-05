@@ -26,10 +26,13 @@ class TwitterAuth
 
     private $url;
 
-    private $requestParam;
+    private $screenName;
 
     private $requestType;
 
+    private $count;
+
+    private $extendedTweet;
 
     /**
      * Get params from services and env from DependencyInjection
@@ -44,10 +47,12 @@ class TwitterAuth
         $this->oauthAccessTokenSecret = $this->params->get('oauth_access_token_secret');
         $this->consumerKey = $this->params->get('consumer_key');
         $this->consumerSecret = $this->params->get('consumer_secret');
-
         $this->url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
         $this->requestType = "GET";
-        $this->requestParam = "?screen_name=";
+        $this->screenName = "?screen_name=";
+        $this->count = "&count=";
+        $this->extendedTweet = "&tweet_mode=extended";
+
     }
 
 
@@ -64,7 +69,7 @@ class TwitterAuth
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      */
-    public function timeline(string $name)
+    public function timeline(string $name, string $count)
     {
         /**
          * Todo: Error checking
@@ -80,14 +85,14 @@ class TwitterAuth
             'oauth_version' => '1.0'
         );
 
-        $screenName = $this->requestParam;
-        $screenName .= $name;
+        $screenName = $this->screenName .= $name;
+        $count = $this->count .= $count;
 
         //update this request param before strip and sort
-        $this->requestParam = $screenName;
-
+        $this->screenName = $screenName;
+        $extended = $this->extendedTweet;
         //strip and split into oauth array
-        $oauth = $this->stripQueryParam($screenName, $oauth);
+        $oauth = $this->stripQueryParam($screenName, $count, $extended, $oauth);
 
         //sort oauth array
         list($oauth, $oauthPairs, $key, $value) = $this->sortOauth($oauth);
@@ -104,7 +109,7 @@ class TwitterAuth
 
         //actual request
         $client = HttpClient::create();
-        $response = $client->request('GET', $this->url . $this->requestParam, [
+        $response = $client->request('GET', $this->url . $this->screenName . $this->count . $this->extendedTweet, [
             'headers' => $header,
         ]);
 
@@ -128,14 +133,21 @@ class TwitterAuth
      * strip '?' and split to add to oauth array
      *
      * @param string $screenName
+     * @param string $count
+     * @param string $extended
      * @param array $oauth
      * @return array
      */
-    public function stripQueryParam(string $screenName, array $oauth): array
+    public function stripQueryParam(string $screenName, string $count, string $extended, array $oauth): array
     {
-        $screenName = str_replace('?', '', $screenName);
-        $split = explode('=', $screenName);
-        $oauth[$split[0]] = urldecode($split[1]);
+        $params = array($screenName, $count, $extended);
+
+        foreach ($params as $param) {
+            $param = str_replace('?', '', $param);
+            $param = str_replace('&', '', $param);
+            $split = explode('=', $param);
+            $oauth[$split[0]] = urldecode($split[1]);
+        }
 
         return $oauth;
     }

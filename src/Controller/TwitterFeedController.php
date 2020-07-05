@@ -47,7 +47,8 @@ class TwitterFeedController extends AbstractController
 
 
         $name = "eltonofficial";
-        $result = $twitter->timeline($name);
+        $count = "5";
+        $result = $twitter->timeline($name, $count);
 
         //condensed response to only a few fields we may require
         //saves sorting and filtering on the frontend
@@ -55,9 +56,16 @@ class TwitterFeedController extends AbstractController
         $tweets = array();
 
         foreach ($result as $key => $tweet) {
+
+            if(isset($tweet['extended_entities'])) {
+                $media = $tweet['extended_entities']['media'][0]['expanded_url'];
+            } else {
+                $media = null;
+            }
+
             $tweets[] = [
                 'created_at' => $tweet['created_at'],
-                'text' => $tweet['text'],
+                'text' => $tweet['full_text'],
                 'retweet_count' => $tweet['retweet_count'],
                 'favorite_count' => $tweet['favorite_count'],
                 'name' => $tweet['user']['name'],
@@ -67,9 +75,10 @@ class TwitterFeedController extends AbstractController
                 'followers_count' => $tweet['user']['followers_count'],
                 'friends_count' => $tweet['user']['friends_count'],
                 'verified' => $tweet['user']['verified'],
-                'favourites_count_count' => $tweet['user']['favourites_count'],
+                'favourites_count' => $tweet['user']['favourites_count'],
                 'link' => "https://twitter.com/elonmusk/status/" . $tweet['id'],
                 'url' => $tweet['entities']['urls'],
+                'media' => $media,
             ];
         }
 
