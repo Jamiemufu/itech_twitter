@@ -52,7 +52,6 @@ class TwitterAuth
         $this->screenName = "?screen_name=";
         $this->count = "&count=";
         $this->extendedTweet = "&tweet_mode=extended";
-
     }
 
 
@@ -62,19 +61,15 @@ class TwitterAuth
      * Generate and encode base string, secret keys and build headers
      *
      * @param string $name
+     * @param string $count
      * @return array
      * @throws ClientExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
      */
     public function timeline(string $name, string $count)
     {
-        /**
-         * Todo: Error checking
-         */
-
         //in alpha order required for Oauth
         $oauth = array(
             'oauth_consumer_key' => $this->consumerKey,
@@ -85,11 +80,16 @@ class TwitterAuth
             'oauth_version' => '1.0'
         );
 
-        $screenName = $this->screenName .= $name;
-        $count = $this->count .= $count;
+        if(isset($name) && $name != null) {
+            $screenName = $this->screenName .= $name;
+            //update this request param before strip and sort
+            $this->screenName = $screenName;
+        }
 
-        //update this request param before strip and sort
-        $this->screenName = $screenName;
+        if(isset($count) && $count != null) {
+            $count = $this->count .= $count;
+        }
+
         $extended = $this->extendedTweet;
         //strip and split into oauth array
         $oauth = $this->stripQueryParam($screenName, $count, $extended, $oauth);
@@ -109,12 +109,17 @@ class TwitterAuth
 
         //actual request
         $client = HttpClient::create();
-        $response = $client->request('GET', $this->url . $this->screenName . $this->count . $this->extendedTweet, [
-            'headers' => $header,
-        ]);
+        try {
+            $response = $client->request('GET', $this->url . $this->screenName . $this->count . $this->extendedTweet, [
+                'headers' => $header,
+            ]);
+            return $response->toArray(false);
+        } catch (TransportExceptionInterface $e) {
+
+        }
 
         //return as array
-        return $response->toArray();
+
     }
 
     /**

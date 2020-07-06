@@ -22,6 +22,7 @@ class TwitterFeedController extends AbstractController
      *
      * Using my own vue js components for front end via Ajax and post
      * But this is accessible from anywhere so the response can be implemented anywhere
+     * You could also implement getting the name and other required parameters from a form or something
      *
      * @param TwitterAuth $twitter
      * @param Request $request
@@ -41,54 +42,56 @@ class TwitterFeedController extends AbstractController
          * This will get the timeline of the user specified
          *
          * $name = "<sceen_name of user";
+         * $count = "<number of recent tweets";
          * $twitter->timeline($name);
          *
          */
 
 
-        $name = "eltonofficial";
+        $name = "elonmusk";
         $count = "5";
         $result = $twitter->timeline($name, $count);
 
         //condensed response to only a few fields we may require
         //saves sorting and filtering on the frontend
+        if(isset($result["error"])) {
+           return new JsonResponse(['error' => $result["error"]]);
+        } else {
+            $tweets = array();
 
-        $tweets = array();
+            foreach ($result as $key => $tweet) {
 
-        foreach ($result as $key => $tweet) {
+                if (isset($tweet['extended_entities'])) {
+                    $media = $tweet['extended_entities']['media'][0]['media_url_https'];
+                } else {
+                    $media = NULL;
+                }
 
-            if(isset($tweet['extended_entities'])) {
-                $media = $tweet['extended_entities']['media'][0]['expanded_url'];
-            } else {
-                $media = null;
+                $tweets[] = [
+                    'created_at' => $tweet['created_at'],
+                    'text' => $tweet['full_text'],
+                    'retweet_count' => $tweet['retweet_count'],
+                    'favorite_count' => $tweet['favorite_count'],
+                    'name' => $tweet['user']['name'],
+                    'screen_name' => $tweet['user']['screen_name'],
+                    'profile_image_url' => $tweet['user']['profile_image_url'],
+                    'profile_banner' => $tweet['user']['profile_banner_url'],
+                    'followers_count' => $tweet['user']['followers_count'],
+                    'friends_count' => $tweet['user']['friends_count'],
+                    'verified' => $tweet['user']['verified'],
+                    'favourites_count' => $tweet['user']['favourites_count'],
+                    'link' => "https://twitter.com/elonmusk/status/" . $tweet['id'],
+                    'url' => $tweet['entities']['urls'],
+                    'media' => $media,
+                ];
             }
-
-            $tweets[] = [
-                'created_at' => $tweet['created_at'],
-                'text' => $tweet['full_text'],
-                'retweet_count' => $tweet['retweet_count'],
-                'favorite_count' => $tweet['favorite_count'],
-                'name' => $tweet['user']['name'],
-                'screen_name' => $tweet['user']['screen_name'],
-                'profile_image_url' => $tweet['user']['profile_image_url'],
-                'profile_banner' => $tweet['user']['profile_banner_url'],
-                'followers_count' => $tweet['user']['followers_count'],
-                'friends_count' => $tweet['user']['friends_count'],
-                'verified' => $tweet['user']['verified'],
-                'favourites_count' => $tweet['user']['favourites_count'],
-                'link' => "https://twitter.com/elonmusk/status/" . $tweet['id'],
-                'url' => $tweet['entities']['urls'],
-                'media' => $media,
-            ];
+            //cache response for an hour, unless different request method made i.e POST to update cache
+            $response = new JsonResponse($tweets);
+            $response->setPublic();
+            $response->setMaxAge(3600);
+            $response->isNotModified($request);
+            return $response;
         }
-
-        //cache response for an hour, unless different request method made i.e POST to update cache
-        $response = new JsonResponse($tweets);
-        $response->setPublic();
-        $response->setMaxAge(3600);
-        $response->isNotModified($request);
-
-        return $response;
     }
 
     /**
