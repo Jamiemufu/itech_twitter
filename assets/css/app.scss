@@ -1,4 +1,149 @@
+//general stlyes
 body {
-    background-color: lightgray;
-    font-size: 12px;
+	background-color: lightgray;
+	font-size: 12px;
+	box-sizing: border-box;
+	color: whitesmoke;
+}
+//default library overwrites
+.v-application--wrap {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: center;
+	align-content: flex-start;
+	align-items: flex-start;
+	width: 100%;
+	padding-top: 25px;
+}
+
+//card
+.card--container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.card {
+	background: #1DA1F2 !important;
+	color: whitesmoke;
+	font-family: "Roboto", sans-serif;
+	display: flex;
+	flex-direction: column;
+	width: 250px;
+	margin: 20px;
+	
+	.card--title {
+		color: whitesmoke;
+		
+		h2 {
+			font-weight: bold;
+			padding-left: 2px;
+		}
+	}
+	
+	
+	.card--body__text {
+		font-size: 14px;
+		font-family: "Roboto", sans-serif;
+		line-height: 1.3;
+		//padding: 25px 10px;
+		word-break: break-word;
+		background: inherit;
+		color: whitesmoke;
+		display: flex;
+		justify-content: flex-start;
+		align-content: flex-start;
+		height: 100px;
+		flex: 1;
+	}
+	
+	.card-subtitle__profile,
+	.card-subtitle__profile--container {
+		padding-bottom: 0px;
+		display: flex;
+		width: 100%;
+		justify-content: flex-start;
+		align-content: center;
+		flex-direction: row;
+		align-items: center;
+		
+		img {
+			width: 90%;
+			border-radius: 50%;
+		}
+		
+		p {
+			padding-top: 9px;
+			color: white;
+		}
+		
+		.card-subtitle__icon--container {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-evenly;
+			align-items: center;
+			align-content: center;
+			padding-bottom: 6px;
+			
+			span {
+				padding-left: 3px;
+				font-size: 10px;
+				color: whitesmoke;
+			}
+		}
+	}
+	
+	.card-subtitle__links--container {
+		padding-top: 0;
+		
+		.card-subtitle__links {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			align-content: flex-end;
+			align-items: center;
+			
+			.card-dropdown__arrow {
+				flex-grow: 2;
+				padding: 0;
+				
+				.v-card__actions {
+					padding: 0;
+				}
+				
+				.v-btn {
+					padding: 0;
+					margin-left: -5px;
+				}
+			}
+		}
+	}
+	
+	.card-dropdown {
+		padding-top: 0;
+		display: flex;
+		width: 100%;
+		justify-content: flex-start;
+		align-content: center;
+		flex-direction: row;
+		align-items: flex-end;
+		
+		a {
+			color: whitesmoke;
+		}
+		
+		.card-dropdown__replies {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			justify-content: flex-end;
+			align-content: flex-end;
+			color: whitesmoke;
+		}
+	}
+	
+	
 }

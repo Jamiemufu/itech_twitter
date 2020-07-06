@@ -1,10 +1,14 @@
 <template>
     <div>
-        <p>Twitter Feed</p>
         <!--cards-->
-        <div v-for="item in tweets">
-            <card :tweet="item"></card>
-        </div>
+        <v-app>
+            <div v-for="item in tweets">
+                <div class="card--container">
+                    <!--for each tweet create a card component - and pass in current tweet and show props-->
+                    <card :tweet="item" :show="show" :update="update" ></card>
+                </div>
+            </div>
+        </v-app>
         <!--update-->
         <div>
             <button @click="update">Update</button>
@@ -18,6 +22,8 @@
         data() {
             return {
                 tweets: '',
+                //show is used to show the loading bar ontop of tweets
+                show: false,
             }
         },
         created() {
@@ -33,15 +39,38 @@
                 //immediately update and refresh cache
                 axios.post('/twitter_feed')
                     .then(response => {
-                        // save response to this instance of tweets
-                        this.tweets = response.data;
+                        // if error log response
+                        if(response.data.error) {
+                            console.log("Error: " + response.data.error)
+                        } else {
+                            //set show to false, as we will be loading...
+                            // save response to this instance of tweets
+                            this.tweets = response.data;
+                            this.show = true;
+                            setTimeout(() => (this.show = false), 2000)
+                        }
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
                     });
             },
             fetch() {
                 //get request will hit cache
+                //set show to false, as we will be loading...
                 axios.get('/twitter_feed')
                     .then(response => {
-                        this.tweets = response.data;
+                        if(response.data.error) {
+                            console.log("Error: " + response.data.error)
+                        } else {
+                            this.tweets = response.data;
+                            this.show = true;
+                            setTimeout(() => (this.show = false), 2000)
+                        }
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
                     });
             },
             //call update every hour - inline with server cache refresh
