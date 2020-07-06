@@ -19,6 +19,7 @@ console.log("loaded");
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 import Vue from 'vue';
+import vuetify from './plugins/vuetify'
 
 /**
  * Components
@@ -30,5 +31,5 @@ Vue.component('card', require('./components/Card').default);
  * Create a fresh Vue Application instance
  */
 new Vue({
-    el: '#app',
-});
+    vuetify,
+}).$mount('#app')
