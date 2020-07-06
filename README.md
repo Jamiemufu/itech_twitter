@@ -6,7 +6,7 @@ iTech Media technical test
 # Installation (Working Example so far...)
 1) Clone Repository.
 2) Composer install
-3) You should not need to install any node packages as its all built, but if you do. npm install.
+3) You should not need to install any node packages as its all built (now), but if you do. npm install, then npm run dev/production/watch...
 4) There are 2 parameters you can set inside the TwitterFeedController, the screen_name and number of tweets you want. Set these accordingly.
 5) In terminal run Symfony server:start. There is no database, so no .env vars need to be change, or migrations to run etc.
 6) If using symfony server:start (recommended as its just quicker) follow the link from the terminal.
@@ -33,4 +33,7 @@ iTech Media technical test
 - The twitter card also has profile name, picture and how many likes and retweets it's had.
 - The twitter card has a refresh button and link button
 
+# Build Files
+
+I have recently included the build files, so you should not have to install npm packages and run 'npm run' - These are dev compiled and not minimised - for ease of reading.
 ## Thank you for this opportunity, and I look forward to feedback
